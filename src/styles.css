@@ -32,6 +32,7 @@ body {
     min-width: 60px;
     height: 60px;
     cursor: pointer;
+    -webkit-user-select: none;
     user-select: none;
     transition: background-color 0.3s;
     overflow: hidden;
@@ -143,6 +144,9 @@ body {
 }
 
 [data-mode="minterms"] .selected-cell.selected-x {
+    border-color: #ffc107;
+    box-shadow: 0 0 10px rgba(255, 193, 7, 0.7);
+}
 
 [data-mode="maxterms"] .selected-cell.selected-0 {
     border-color: #dc3545;
