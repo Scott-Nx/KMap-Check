@@ -1,0 +1,255 @@
+/* Import Google Prompt font */
+@import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap');
+
+body {
+    font-family: 'Prompt', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
+}
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+.card {
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+.kmap-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    table-layout: fixed;
+    overflow: hidden;
+}
+.kmap-table th, .kmap-table td {
+    border: 1px solid #dee2e6;
+    padding: 12px;
+    text-align: center;
+}
+.kmap-cell {
+    width: auto;
+    min-width: 60px;
+    height: 60px;
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.3s;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.kmap-cell.selected-0 {
+    background-color: #dc3545;
+    color: white;
+}
+.kmap-cell.selected-1 {
+    background-color: #28a745;
+    color: white;
+}
+.kmap-cell.selected-x {
+    background-color: #ffc107;
+    color: black;
+}
+.truth-table {
+    width: 100%;
+    margin: 20px 0;
+}
+.btn-primary {
+    background-color: #4361ee;
+    border-color: #4361ee;
+}
+.btn-primary:hover {
+    background-color: #3a56e4;
+    border-color: #3a56e4;
+}
+.header-section {
+    background: linear-gradient(to right, #4361ee, #3a0ca3);
+    color: white;
+    padding: 30px 0;
+    border-radius: 10px;
+    margin-bottom: 30px;
+}
+
+#simplifiedExpression {
+    font-family: 'Consolas', monospace;
+    font-size: 1.2rem;
+    padding: 15px;
+    border-radius: 8px;
+    background-color: #f8f9fa;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    overflow-x: hidden;
+    white-space: normal;
+    word-wrap: break-word;
+}
+
+#groups {
+    font-family: 'Consolas', monospace;
+    line-height: 1.6;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.group-highlight-1 { background-color: rgba(40, 167, 69, 0.2); }
+.group-highlight-2 { background-color: rgba(0, 123, 255, 0.2); }
+.group-highlight-3 { background-color: rgba(255, 193, 7, 0.2); }
+.group-highlight-4 { background-color: rgba(220, 53, 69, 0.2); }
+.group-highlight-5 { background-color: rgba(111, 66, 193, 0.2); }
+
+/* Add styles for selected cells */
+.kmap-cell.selected-cell {
+    border: 3px solid #007bff;
+    box-shadow: 0 0 10px rgba(0, 123, 255, 0.7);
+    position: relative;
+    z-index: 10;
+}
+
+/* Styles for active tool buttons */
+.btn-group .btn.active {
+    filter: brightness(120%);
+    transform: translateY(1px);
+}
+
+/* Make the selection tool more visible when active */
+#selectTool.active {
+    background-color: #0dcaf0;
+    color: white;
+    font-weight: bold;
+}
+
+/* Style for selected cells display */
+#selectedCells .badge {
+    font-size: 0.9rem;
+    padding: 0.5em 0.8em;
+    max-width: 100%;
+    overflow-wrap: break-word;
+}
+
+/* Add to your existing styles */
+
+/* Mode indicator styling */
+#mode-indicator {
+    font-size: 0.9rem;
+    padding: 0.4em 0.7em;
+    display: inline-block;
+    margin-right: 10px;
+}
+
+/* Style cells differently based on selection mode */
+[data-mode="minterms"] .selected-cell.selected-1 {
+    border-color: #28a745;
+    box-shadow: 0 0 10px rgba(40, 167, 69, 0.7);
+}
+
+[data-mode="minterms"] .selected-cell.selected-x {
+
+[data-mode="maxterms"] .selected-cell.selected-0 {
+    border-color: #dc3545;
+    box-shadow: 0 0 10px rgba(220, 53, 69, 0.7);
+}
+
+[data-mode="maxterms"] .selected-cell.selected-x {
+    border-color: #ffc107;
+    box-shadow: 0 0 10px rgba(255, 193, 7, 0.7);
+}
+
+/* Add styles for truth table interaction */
+.tt-clickable {
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s ease;
+}
+
+.tt-clickable:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 5px rgba(0,0,0,0.2);
+    font-weight: bold;
+}
+
+.tt-clickable:active {
+    transform: scale(0.95);
+}
+
+.tt-clickable::after {
+    content: '↺';
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    font-size: 10px;
+    opacity: 0.5;
+}
+
+/* Style for truth table mode */
+[data-mode="truthTable"] .kmap-cell.selected-1 {
+    border: 2px solid #28a745;
+}
+
+[data-mode="truthTable"] .kmap-cell.selected-0 {
+    border: 2px solid #dc3545;
+}
+
+[data-mode="truthTable"] .kmap-cell.selected-x {
+    border: 2px solid #ffc107;
+}
+
+/* Add styles for verification results */
+.alert {
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+}
+
+.alert-success {
+    background-color: rgba(40, 167, 69, 0.1);
+    border: 1px solid rgba(40, 167, 69, 0.3);
+    color: #155724;
+}
+
+.alert-danger {
+    background-color: rgba(220, 53, 69, 0.1);
+    border: 1px solid rgba(220, 53, 69, 0.3);
+    color: #721c24;
+}
+
+.alert h5 {
+    margin-top: 0;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+#useExpressionAnyway {
+    transition: all 0.2s;
+}
+
+#useExpressionAnyway:hover {
+    background-color: #ffc107;
+    color: #212529;
+}
+
+/* Style for disabled features */
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.text-warning {
+    color: #ffc107;
+    font-weight: bold;
+}
+
+.text-muted {
+    opacity: 0.5;
+}
+
+/* Add these rules to remove scrollbars from K-Map */
+.table-responsive {
+    overflow-x: visible;
+    overflow-y: visible;
+}
+
+/* Ensure container has sufficient width */
+.card-body .table-responsive {
+    min-width: 100%;
+    overflow: hidden;
+}
