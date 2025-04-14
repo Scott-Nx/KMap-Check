@@ -1218,7 +1218,11 @@ document.addEventListener('DOMContentLoaded', function() {
              groups.push([2, 10, 3, 11]); // Wrap A'C' + AC' -> C'? No. Cells 2,3,10,11 -> __1_ -> C? No. 0010, 0011, 1010, 1011 -> _01_ -> B'C
              groups.push([0, 4, 12, 8]); // This is B'D' / C'D'
              groups.push([2, 6, 14, 10]); // This is BD' / CD'
-             groups.push([0, 12, 3, 15]); // Corner Wrap -> B'D' + BD -> D'? No. 0000, 1100, 0011, 1111 -> __ _ _ -> No commonality? 0,3,12,15 -> B'D'
+             groups.push([0, 1, 8, 9]); // Wrap A'C' + AC' -> C'? No. Cells 0,1,8,9 -> __0_ -> C'? No. 0000, 0001, 1000, 1001 -> _00_ -> B'C'
+             groups.push([2, 3, 10, 11]); // Wrap A'C' + AC' -> C'? No. Cells 2,3,10,11 -> __1_ -> C? No. 0010, 0011, 1010, 1011 -> _01_ -> B'C
+             groups.push([4, 5, 12, 13]); // Wrap A'C' + AC' -> C'? No. Cells 4,5,12,13 -> __0_ -> C'? No. 0100, 0101, 1100, 1101 -> _10_ -> B'C
+             groups.push([6, 7, 14, 15]); // Wrap A'C' + AC' -> C'? No. Cells 6,7,14,15 -> __1_ -> C? No. 0110, 0111, 1110, 1111 -> _11_ -> B'C
+             groups.push([0, 3, 12, 15]); // Corner Wrap -> B'D' + BD -> D'? No. 0000, 1100, 0011, 1111 -> __ _ _ -> No commonality? 0,3,12,15 -> B'D'
 
              // Final list of standard 4-groups (remove duplicates)
              const unique4Groups = new Set([
@@ -1380,9 +1384,21 @@ document.addEventListener('DOMContentLoaded', function() {
     // This function needs to be aligned with the main simplification logic or removed/reworked.
     // It currently doesn't use the PI/EPI logic.
     function generateExpressionFromCells(cells, mode) {
-        if (cells.length === 0) return mode === MODES.MINTERMS ? '0' : '1';
+        const n = cells.length;
+        // Check if the number of selected cells is a valid group size (2, 4, 8, 16)
+        const isValidGroupSize = n === 2 || n === 4 || n === 8 || n === 16;
+
+        if (n === 0) return mode === MODES.MINTERMS ? '0' : '1';
+
+        if (!isValidGroupSize && n !== KMAP_SIZE) { // Allow full map selection (n=16) implicitly handled later
+             alert(`Invalid selection size: ${n}. Please select 2, 4, 8, or 16 cells that form a valid K-Map group.`);
+             // Return the current display value or a placeholder to avoid clearing the result area
+             return displayAreas.simplifiedExpression.textContent || 'Invalid selection';
+        }
+
+
         // Consider if all cells are selected (simplifies to 1 for minterms, 0 for maxterms)
-        if (cells.length === KMAP_SIZE) return mode === MODES.MINTERMS ? '1' : '0';
+        if (n === KMAP_SIZE) return mode === MODES.MINTERMS ? '1' : '0';
 
         // Attempt to simplify the selected group directly (only works if selection is a perfect PI)
         const simplifiedSOP = groupToExpressionSOP(cells);
@@ -1395,12 +1411,22 @@ document.addEventListener('DOMContentLoaded', function() {
              // containing only the selected cells as 1s.
              if (simplifiedSOP !== '1' || cells.length === KMAP_SIZE) { // Avoid returning '1' unless all cells selected
                  // Basic check: does the expression length seem reasonable for the group size?
-                 const expectedLiterals = 4 - Math.log2(cells.length);
-                 if (simplifiedSOP.replace(/'/g, '').length === expectedLiterals) {
+                 // Check if the number of literals matches the expectation for the group size
+                 const expectedLiterals = 4 - Math.log2(n); // n is already validated as power of 2
+                 // Count literals in the simplified expression (A, B, C, D, ignoring ')
+                 const actualLiterals = (simplifiedSOP.match(/[A-D]/g) || []).length;
+
+                 if (actualLiterals === expectedLiterals) {
                     return simplifiedSOP;
+                 } else {
+                     // If simplification doesn't match expected size, it might not be a valid rectangular group
+                     alert(`The selected ${n} cells do not form a valid rectangular group that can be simplified to a single term.`);
+                     return displayAreas.simplifiedExpression.textContent || 'Invalid group shape';
                  }
              }
              // Fallback: generate canonical SOP for the selection (sum of individual minterms)
+             // This fallback might not be desired if we strictly enforce valid groups
+             /* // Commenting out fallback for now to enforce valid group selection
              return cells.map(cellIndex => {
                  const binary = cellIndex.toString(2).padStart(4, '0');
                  let term = [];
@@ -1410,18 +1436,28 @@ document.addEventListener('DOMContentLoaded', function() {
                  if (binary[3] === '0') term.push("D'"); else term.push('D');
                  return term.join('');
              }).join(' + ');
+             */
+             return displayAreas.simplifiedExpression.textContent || 'Invalid group shape'; // Return current or placeholder
+
 
         } else { // Maxterms mode (POS) - Currently disabled in UI, but logic stub
              // Similar simplification check for POS
              if (simplifiedPOS !== '0' || cells.length === KMAP_SIZE) {
                  // Basic check for POS term validity
-                 const expectedLiterals = 4 - Math.log2(cells.length);
-                 if (simplifiedPOS.replace(/['+()]/g, '').length === expectedLiterals) {
+                 const expectedLiterals = 4 - Math.log2(n);
+                 // Count literals in the simplified POS expression (A, B, C, D, ignoring ', +, () )
+                 const actualLiterals = (simplifiedPOS.match(/[A-D]/g) || []).length;
+
+                 if (actualLiterals === expectedLiterals) {
                      return simplifiedPOS;
+                 } else {
+                     alert(`The selected ${n} cells do not form a valid rectangular group that can be simplified to a single term.`);
+                     return displayAreas.simplifiedExpression.textContent || 'Invalid group shape';
                  }
              }
              // Fallback: generate canonical POS for the selection (product of individual maxterms)
              // Note: This should generate terms for the SELECTED 0s/Xs, not the unselected ones.
+             /* // Commenting out fallback
              return cells.map(cellIndex => {
                  const binary = cellIndex.toString(2).padStart(4, '0');
                  let term = [];
@@ -1431,9 +1467,10 @@ document.addEventListener('DOMContentLoaded', function() {
                  if (binary[3] === '0') term.push("D"); else term.push("D'");
                  return '(' + term.join(' + ') + ')';
              }).join(' · ');
+             */
+             return displayAreas.simplifiedExpression.textContent || 'Invalid group shape'; // Return current or placeholder
         }
     }
-
 
     // --- Utility Functions ---
 
