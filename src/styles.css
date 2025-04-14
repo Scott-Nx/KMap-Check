@@ -257,3 +257,9 @@ body {
     min-width: 100%;
     overflow: hidden;
 }
+
+/* Footer styling */
+.footer {
+    border-top: 1px solid #e7e7e7;
+    font-size: 0.9em;
+}
