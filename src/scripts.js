@@ -288,8 +288,13 @@ document.addEventListener('DOMContentLoaded', function() {
             // Show the relevant section
             if (newMode === MODES.MINTERMS) {
                 inputSections.minterm.classList.remove(CSS_CLASSES.D_NONE);
+                // Reset K-Map to all 0s when switching back to Minterm mode
+                clearKMap(); // This function handles state and UI reset
             } else if (newMode === MODES.MAXTERMS) {
                 inputSections.maxterm.classList.remove(CSS_CLASSES.D_NONE);
+                // Reset K-Map to all 1s for Maxterm mode entry
+                kmap.fill(1);
+                kmapCells.forEach((cell, i) => updateKMapCellAppearance(cell, 1));
             } else if (newMode === MODES.TRUTH_TABLE) {
                 inputSections.truthTable.classList.remove(CSS_CLASSES.D_NONE);
                 // Scroll to truth table if switching to it
