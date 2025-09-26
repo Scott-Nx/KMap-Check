@@ -1,9 +1,9 @@
 /* Import Google Prompt font */
-@import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap");
 
 :root {
-    --font-primary: 'Prompt', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    --font-monospace: 'Consolas', monospace;
+    --font-primary: "Prompt", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    --font-monospace: "Consolas", monospace;
 
     --color-background: #f8f9fa;
     --color-white: #ffffff;
@@ -25,7 +25,6 @@
     --color-success-shadow: rgba(40, 167, 69, 0.7);
     --color-success-highlight: rgba(40, 167, 69, 0.2);
 
-
     --color-danger: #dc3545;
     --color-danger-light: rgba(220, 53, 69, 0.1);
     --color-danger-border: rgba(220, 53, 69, 0.3);
@@ -33,14 +32,17 @@
     --color-danger-shadow: rgba(220, 53, 69, 0.7);
     --color-danger-highlight: rgba(220, 53, 69, 0.2);
 
-
     --color-warning: #ffc107;
     --color-warning-shadow: rgba(255, 193, 7, 0.7);
     --color-warning-highlight: rgba(255, 193, 7, 0.2);
 
-
     --color-info: #0dcaf0;
-    --color-info-highlight: rgba(0, 123, 255, 0.2); /* Assuming this was info/blue */
+    --color-info-highlight: rgba(
+        0,
+        123,
+        255,
+        0.2
+    ); /* Assuming this was info/blue */
     --color-info-border: #007bff; /* From selected-cell */
     --color-info-shadow: rgba(0, 123, 255, 0.7); /* From selected-cell */
 
@@ -68,7 +70,11 @@ body {
 
 /* --- Header --- */
 .header-section {
-    background: linear-gradient(to right, var(--color-primary-gradient-start), var(--color-primary-gradient-end));
+    background: linear-gradient(
+        to right,
+        var(--color-primary-gradient-start),
+        var(--color-primary-gradient-end)
+    );
     color: var(--color-white);
     padding: 30px 0;
     border-radius: var(--border-radius-card);
@@ -76,14 +82,16 @@ body {
 }
 
 /* --- Tables (K-Map & Truth Table) --- */
-.kmap-table, .truth-table {
+.kmap-table,
+.truth-table {
     width: 100%;
     border-collapse: collapse;
     margin: 20px 0;
     table-layout: fixed;
     overflow: hidden; /* Keep this? Review if needed */
 }
-.kmap-table th, .kmap-table td {
+.kmap-table th,
+.kmap-table td {
     border: 1px solid var(--color-border);
     padding: 12px;
     text-align: center;
@@ -97,7 +105,10 @@ body {
     cursor: pointer;
     -webkit-user-select: none;
     user-select: none;
-    transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
+    transition:
+        background-color 0.3s,
+        border-color 0.3s,
+        box-shadow 0.3s;
     overflow: hidden;
     text-overflow: ellipsis;
     position: relative; /* Needed for potential future absolute positioning inside */
@@ -159,14 +170,14 @@ body {
 }
 .tt-clickable:hover {
     transform: scale(1.1);
-    box-shadow: 0 0 5px rgba(0,0,0,0.2); /* Keep specific shadow? */
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); /* Keep specific shadow? */
     font-weight: bold;
 }
 .tt-clickable:active {
     transform: scale(0.95);
 }
 .tt-clickable::after {
-    content: '↺';
+    content: "↺";
     position: absolute;
     top: 2px;
     right: 2px;
@@ -237,11 +248,21 @@ body {
 }
 
 /* --- Group Highlighting --- */
-.group-highlight-1 { background-color: var(--color-success-highlight); }
-.group-highlight-2 { background-color: var(--color-info-highlight); }
-.group-highlight-3 { background-color: var(--color-warning-highlight); }
-.group-highlight-4 { background-color: var(--color-danger-highlight); }
-.group-highlight-5 { background-color: var(--color-secondary-highlight); }
+.group-highlight-1 {
+    background-color: var(--color-success-highlight);
+}
+.group-highlight-2 {
+    background-color: var(--color-info-highlight);
+}
+.group-highlight-3 {
+    background-color: var(--color-warning-highlight);
+}
+.group-highlight-4 {
+    background-color: var(--color-danger-highlight);
+}
+.group-highlight-5 {
+    background-color: var(--color-secondary-highlight);
+}
 
 /* --- Mode Indicator --- */
 #mode-indicator {
@@ -275,7 +296,9 @@ body {
 
 /* --- Utility Classes --- */
 .text-warning {
-    color: var(--color-warning); /* Consider removing if Bootstrap provides this */
+    color: var(
+        --color-warning
+    ); /* Consider removing if Bootstrap provides this */
     font-weight: bold;
 }
 .text-muted {

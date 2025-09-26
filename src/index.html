@@ -1,220 +1,483 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>K-Map Solver</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <div class="container">
-        <div class="header-section text-center">
-            <h1>K-Map Solver <span class="badge bg-warning text-dark">Beta</span></h1>
-            <p class="lead">Interactive Karnaugh Map tool with Truth Table and Boolean Expression Simplification</p>
-        </div>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>K-Map Solver</title>
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="styles.css" />
+    </head>
+    <body>
+        <div class="container">
+            <div class="header-section text-center">
+                <h1>
+                    K-Map Solver
+                    <span class="badge bg-warning text-dark">Beta</span>
+                </h1>
+                <p class="lead">
+                    Interactive Karnaugh Map tool with Truth Table and Boolean
+                    Expression Simplification
+                </p>
+            </div>
 
-        <div class="row">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header bg-primary text-white">
-                        <h3 class="mb-0">K-Map Input</h3>
-                    </div>
-                    <div class="card-body">
-                        <div class="mb-3">
-                            <h4>Input Method</h4>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="inputMethod" id="minterms" value="minterms" checked>
-                                <label class="form-check-label" for="minterms">Minterms</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="inputMethod" id="maxterms" value="maxterms">
-                                <label class="form-check-label" for="maxterms">Maxterms</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="inputMethod" id="truthTable" value="truthTable">
-                                <label class="form-check-label" for="truthTable">Truth Table</label>
-                            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            <h3 class="mb-0">K-Map Input</h3>
                         </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <h4>Input Method</h4>
+                                <div class="form-check form-check-inline">
+                                    <input
+                                        class="form-check-input"
+                                        type="radio"
+                                        name="inputMethod"
+                                        id="minterms"
+                                        value="minterms"
+                                        checked
+                                    />
+                                    <label
+                                        class="form-check-label"
+                                        for="minterms"
+                                        >Minterms</label
+                                    >
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input
+                                        class="form-check-input"
+                                        type="radio"
+                                        name="inputMethod"
+                                        id="maxterms"
+                                        value="maxterms"
+                                    />
+                                    <label
+                                        class="form-check-label"
+                                        for="maxterms"
+                                        >Maxterms</label
+                                    >
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input
+                                        class="form-check-input"
+                                        type="radio"
+                                        name="inputMethod"
+                                        id="truthTable"
+                                        value="truthTable"
+                                    />
+                                    <label
+                                        class="form-check-label"
+                                        for="truthTable"
+                                        >Truth Table</label
+                                    >
+                                </div>
+                            </div>
 
-                        <div id="mintermInput" class="mb-3">
-                            <label for="mintermsInput" class="form-label">Enter Minterms (comma separated)</label>
-                            <input type="text" class="form-control" id="mintermsInput" placeholder="0, 1, 5, 15">
-                            <label for="dontCareInput" class="form-label mt-2">Enter Don't Care terms (comma separated)</label>
-                            <input type="text" class="form-control" id="dontCareInput" placeholder="4, 10">
-                            <button id="generateFromMinterms" class="btn btn-primary mt-3">Generate K-Map</button>
-                        </div>
-
-                        <div id="maxtermInput" class="mb-3 d-none">
-                            <label for="maxtermsInput" class="form-label">Enter Maxterms (comma separated)</label>
-                            <input type="text" class="form-control" id="maxtermsInput" placeholder="0, 1, 5, 15">
-                            <label for="maxDontCareInput" class="form-label mt-2">Enter Don't Care terms (comma separated)</label>
-                            <input type="text" class="form-control" id="maxDontCareInput" placeholder="4, 10">
-                            <button id="generateFromMaxterms" class="btn btn-primary mt-3">Generate K-Map</button>
-                        </div>
-                        
-                        <div id="expressionInput" class="mb-3">
-                            <label for="booleanExpression" class="form-label">Enter Boolean Expression to Verify</label>
-                            <input type="text" class="form-control" id="booleanExpression" placeholder="AB + CD'">
-                            <small class="form-text text-muted d-block mb-2">
-                                Use (A-D) for variables, ' for NOT, 
-                                multiplication for AND (AB), + for OR.
-                            </small>
-                            <div class="mt-3">
-                                <button id="verifyExpression" class="btn btn-primary">Verify Expression</button>
+                            <div id="mintermInput" class="mb-3">
+                                <label for="mintermsInput" class="form-label"
+                                    >Enter Minterms (comma separated)</label
+                                >
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    id="mintermsInput"
+                                    placeholder="0, 1, 5, 15"
+                                />
+                                <label
+                                    for="dontCareInput"
+                                    class="form-label mt-2"
+                                    >Enter Don't Care terms (comma
+                                    separated)</label
+                                >
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    id="dontCareInput"
+                                    placeholder="4, 10"
+                                />
+                                <button
+                                    id="generateFromMinterms"
+                                    class="btn btn-primary mt-3"
+                                >
+                                    Generate K-Map
+                                </button>
                             </div>
-                        </div>
 
-                        <div id="truthTableInput" class="mb-3 d-none">
-                            <div class="alert alert-info">
-                                <h5>Truth Table Input Mode</h5>
-                                <p>Click on the output cells in the Truth Table below to toggle between 0, 1, and X (don't care).</p>
-                                <p>The K-Map will update automatically as you edit.</p>
+                            <div id="maxtermInput" class="mb-3 d-none">
+                                <label for="maxtermsInput" class="form-label"
+                                    >Enter Maxterms (comma separated)</label
+                                >
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    id="maxtermsInput"
+                                    placeholder="0, 1, 5, 15"
+                                />
+                                <label
+                                    for="maxDontCareInput"
+                                    class="form-label mt-2"
+                                    >Enter Don't Care terms (comma
+                                    separated)</label
+                                >
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    id="maxDontCareInput"
+                                    placeholder="4, 10"
+                                />
+                                <button
+                                    id="generateFromMaxterms"
+                                    class="btn btn-primary mt-3"
+                                >
+                                    Generate K-Map
+                                </button>
                             </div>
-                            <div class="d-flex justify-content-start">
-                                <button id="generateFromTruthTable" class="btn btn-primary me-2">Generate K-Map</button>
-                                <button id="resetTruthTable" class="btn btn-outline-danger">Reset Table</button>
+
+                            <div id="expressionInput" class="mb-3">
+                                <label
+                                    for="booleanExpression"
+                                    class="form-label"
+                                    >Enter Boolean Expression to Verify</label
+                                >
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    id="booleanExpression"
+                                    placeholder="AB + CD'"
+                                />
+                                <small
+                                    class="form-text text-muted d-block mb-2"
+                                >
+                                    Use (A-D) for variables, ' for NOT,
+                                    multiplication for AND (AB), + for OR.
+                                </small>
+                                <div class="mt-3">
+                                    <button
+                                        id="verifyExpression"
+                                        class="btn btn-primary"
+                                    >
+                                        Verify Expression
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div id="truthTableInput" class="mb-3 d-none">
+                                <div class="alert alert-info">
+                                    <h5>Truth Table Input Mode</h5>
+                                    <p>
+                                        Click on the output cells in the Truth
+                                        Table below to toggle between 0, 1, and
+                                        X (don't care).
+                                    </p>
+                                    <p>
+                                        The K-Map will update automatically as
+                                        you edit.
+                                    </p>
+                                </div>
+                                <div class="d-flex justify-content-start">
+                                    <button
+                                        id="generateFromTruthTable"
+                                        class="btn btn-primary me-2"
+                                    >
+                                        Generate K-Map
+                                    </button>
+                                    <button
+                                        id="resetTruthTable"
+                                        class="btn btn-outline-danger"
+                                    >
+                                        Reset Table
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header bg-success text-white">
-                        <h3 class="mb-0">K-Map (4-Variable)</h3>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="kmap-table">
-                                <thead>
-                                    <tr>
-                                        <th></th>
-                                        <th>AB=00</th>
-                                        <th>AB=01</th>
-                                        <th>AB=11</th>
-                                        <th>AB=10</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <th>CD=00</th>
-                                        <td class="kmap-cell" data-index="0">0</td>
-                                        <td class="kmap-cell" data-index="4">4</td>
-                                        <td class="kmap-cell" data-index="12">12</td>
-                                        <td class="kmap-cell" data-index="8">8</td>
-                                    </tr>
-                                    <tr>
-                                        <th>CD=01</th>
-                                        <td class="kmap-cell" data-index="1">1</td>
-                                        <td class="kmap-cell" data-index="5">5</td>
-                                        <td class="kmap-cell" data-index="13">13</td>
-                                        <td class="kmap-cell" data-index="9">9</td>
-                                    </tr>
-                                    <tr>
-                                        <th>CD=11</th>
-                                        <td class="kmap-cell" data-index="3">3</td>
-                                        <td class="kmap-cell" data-index="7">7</td>
-                                        <td class="kmap-cell" data-index="15">15</td>
-                                        <td class="kmap-cell" data-index="11">11</td>
-                                    </tr>
-                                    <tr>
-                                        <th>CD=10</th>
-                                        <td class="kmap-cell" data-index="2">2</td>
-                                        <td class="kmap-cell" data-index="6">6</td>
-                                        <td class="kmap-cell" data-index="14">14</td>
-                                        <td class="kmap-cell" data-index="10">10</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <div class="d-flex justify-content-center mt-3">
-                                <div class="btn-group">
-                                    <button class="btn btn-success" id="setTo1">Set to 1</button>
-                                    <button class="btn btn-danger" id="setTo0">Set to 0</button>
-                                    <button class="btn btn-warning" id="setToX">Set to X</button>
-                                    <button class="btn btn-info" id="selectTool">Select</button>
-                                    <button class="btn btn-secondary" id="clearKmap">Clear</button>
+
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header bg-success text-white">
+                            <h3 class="mb-0">K-Map (4-Variable)</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="kmap-table">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>AB=00</th>
+                                            <th>AB=01</th>
+                                            <th>AB=11</th>
+                                            <th>AB=10</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th>CD=00</th>
+                                            <td
+                                                class="kmap-cell"
+                                                data-index="0"
+                                            >
+                                                0
+                                            </td>
+                                            <td
+                                                class="kmap-cell"
+                                                data-index="4"
+                                            >
+                                                4
+                                            </td>
+                                            <td
+                                                class="kmap-cell"
+                                                data-index="12"
+                                            >
+                                                12
+                                            </td>
+                                            <td
+                                                class="kmap-cell"
+                                                data-index="8"
+                                            >
+                                                8
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>CD=01</th>
+                                            <td
+                                                class="kmap-cell"
+                                                data-index="1"
+                                            >
+                                                1
+                                            </td>
+                                            <td
+                                                class="kmap-cell"
+                                                data-index="5"
+                                            >
+                                                5
+                                            </td>
+                                            <td
+                                                class="kmap-cell"
+                                                data-index="13"
+                                            >
+                                                13
+                                            </td>
+                                            <td
+                                                class="kmap-cell"
+                                                data-index="9"
+                                            >
+                                                9
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>CD=11</th>
+                                            <td
+                                                class="kmap-cell"
+                                                data-index="3"
+                                            >
+                                                3
+                                            </td>
+                                            <td
+                                                class="kmap-cell"
+                                                data-index="7"
+                                            >
+                                                7
+                                            </td>
+                                            <td
+                                                class="kmap-cell"
+                                                data-index="15"
+                                            >
+                                                15
+                                            </td>
+                                            <td
+                                                class="kmap-cell"
+                                                data-index="11"
+                                            >
+                                                11
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>CD=10</th>
+                                            <td
+                                                class="kmap-cell"
+                                                data-index="2"
+                                            >
+                                                2
+                                            </td>
+                                            <td
+                                                class="kmap-cell"
+                                                data-index="6"
+                                            >
+                                                6
+                                            </td>
+                                            <td
+                                                class="kmap-cell"
+                                                data-index="14"
+                                            >
+                                                14
+                                            </td>
+                                            <td
+                                                class="kmap-cell"
+                                                data-index="10"
+                                            >
+                                                10
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="d-flex justify-content-center mt-3">
+                                    <div class="btn-group">
+                                        <button
+                                            class="btn btn-success"
+                                            id="setTo1"
+                                        >
+                                            Set to 1
+                                        </button>
+                                        <button
+                                            class="btn btn-danger"
+                                            id="setTo0"
+                                        >
+                                            Set to 0
+                                        </button>
+                                        <button
+                                            class="btn btn-warning"
+                                            id="setToX"
+                                        >
+                                            Set to X
+                                        </button>
+                                        <button
+                                            class="btn btn-info"
+                                            id="selectTool"
+                                        >
+                                            Select
+                                        </button>
+                                        <button
+                                            class="btn btn-secondary"
+                                            id="clearKmap"
+                                        >
+                                            Clear
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="row mt-4">
-            <div class="col-12">
-            <div class="card">
-                <div class="card-header bg-info text-white">
-                <h3 class="mb-0">Results</h3>
-                </div>
-                <div class="card-body">
-                <div class="row">
-                    <div class="col-md-6">
-                    <h4>Simplified Boolean Expression</h4>
-                    <div id="simplifiedExpression" class="p-3 bg-light rounded">
-                        Result will appear here
+            <div class="row mt-4">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header bg-info text-white">
+                            <h3 class="mb-0">Results</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h4>Simplified Boolean Expression</h4>
+                                    <div
+                                        id="simplifiedExpression"
+                                        class="p-3 bg-light rounded"
+                                    >
+                                        Result will appear here
+                                    </div>
+                                    <button
+                                        id="copyExpression"
+                                        class="btn btn-outline-primary mt-2"
+                                    >
+                                        Copy to Clipboard
+                                    </button>
+                                    <button
+                                        id="generateFromSelection"
+                                        class="btn btn-info mt-2"
+                                    >
+                                        Generate from Selection
+                                    </button>
+                                </div>
+                                <div class="col-md-6">
+                                    <h4>Boolean Expression Groups</h4>
+                                    <div
+                                        id="groups"
+                                        class="p-3 bg-light rounded"
+                                    >
+                                        Groups will appear here
+                                    </div>
+                                    <div id="selectedCells" class="mt-3">
+                                        <h5>
+                                            Selected Cells:
+                                            <span class="badge bg-secondary"
+                                                >None</span
+                                            >
+                                        </h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <button id="copyExpression" class="btn btn-outline-primary mt-2">Copy to Clipboard</button>
-                    <button id="generateFromSelection" class="btn btn-info mt-2">Generate from Selection</button>
-                    </div>
-                    <div class="col-md-6">
-                    <h4>Boolean Expression Groups</h4>
-                    <div id="groups" class="p-3 bg-light rounded">
-                        Groups will appear here
-                    </div>
-                    <div id="selectedCells" class="mt-3">
-                        <h5>Selected Cells: <span class="badge bg-secondary">None</span></h5>
-                    </div>
-                    </div>
-                </div>
                 </div>
             </div>
-            </div>
-        </div>
 
-        <div class="row mt-4">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-header bg-dark text-white">
-                        <h3 class="mb-0">Truth Table</h3>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-striped truth-table" id="truthTable">
-                                <thead>
-                                    <tr>
-                                        <th>A</th>
-                                        <th>B</th>
-                                        <th>C</th>
-                                        <th>D</th>
-                                        <th>Index</th>
-                                        <th>Output</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="truthTableBody">
-                                    <!-- Truth table will be generated here -->
-                                </tbody>
-                            </table>
+            <div class="row mt-4">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header bg-dark text-white">
+                            <h3 class="mb-0">Truth Table</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table
+                                    class="table table-striped truth-table"
+                                    id="truthTable"
+                                >
+                                    <thead>
+                                        <tr>
+                                            <th>A</th>
+                                            <th>B</th>
+                                            <th>C</th>
+                                            <th>D</th>
+                                            <th>Index</th>
+                                            <th>Output</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="truthTableBody">
+                                        <!-- Truth table will be generated here -->
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <footer class="footer mt-auto py-3 bg-light text-center">
-        <div class="container">
-            <span class="text-muted">
-                <a href="https://github.com/scxtt-nc/KMap-Check/releases" target="_blank" rel="noopener noreferrer">v0.1.0 (Beta)</a> | 
-                <a href="https://github.com/scxtt-nc/KMap-Check" target="_blank" rel="noopener noreferrer">GitHub Repository</a> | 
-                <a href="https://github.com/scxtt-nc/KMap-Check/raw/refs/heads/main/LICENSE" target="_blank" rel="noopener noreferrer">AGPL-3.0 license</a>
-            </span>
-        </div>
-    </footer>
+        <footer class="footer mt-auto py-3 bg-light text-center">
+            <div class="container">
+                <span class="text-muted">
+                    <a
+                        href="https://github.com/scxtt-nc/KMap-Check/releases"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        >v0.1.0 (Beta)</a
+                    >
+                    |
+                    <a
+                        href="https://github.com/scxtt-nc/KMap-Check"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        >GitHub Repository</a
+                    >
+                    |
+                    <a
+                        href="https://github.com/scxtt-nc/KMap-Check/raw/refs/heads/main/LICENSE"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        >AGPL-3.0 license</a
+                    >
+                </span>
+            </div>
+        </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="scripts.js"></script>
-</body>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="scripts.js"></script>
+    </body>
 </html>
