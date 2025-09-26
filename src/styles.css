@@ -1,13 +1,12 @@
-/* Import Google Prompt font */
 @import url("https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap");
-
+/* Core Variables */
 :root {
     --font-primary: "Prompt", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     --font-monospace: "Consolas", monospace;
 
-    --color-background: #f8f9fa;
     --color-white: #ffffff;
     --color-black: #000000;
+    --color-background: #f8f9fa;
     --color-text-dark: #212529;
     --color-border: #dee2e6;
     --color-border-light: #e7e7e7;
@@ -37,38 +36,36 @@
     --color-warning-highlight: rgba(255, 193, 7, 0.2);
 
     --color-info: #0dcaf0;
-    --color-info-highlight: rgba(
-        0,
-        123,
-        255,
-        0.2
-    ); /* Assuming this was info/blue */
-    --color-info-border: #007bff; /* From selected-cell */
-    --color-info-shadow: rgba(0, 123, 255, 0.7); /* From selected-cell */
+    --color-info-border: #007bff;
+    --color-info-shadow: rgba(0, 123, 255, 0.7);
+    --color-info-highlight: rgba(0, 123, 255, 0.2);
 
-    --color-secondary-highlight: rgba(111, 66, 193, 0.2); /* Purple highlight */
+    --color-secondary-highlight: rgba(111, 66, 193, 0.2);
 
-    --border-radius-card: 10px;
-    --border-radius-alert: 8px;
-    --border-radius-input: 8px;
+    --radius-card: 10px;
+    --radius-alert: 8px;
+    --radius-input: 8px;
 }
 
 body {
     font-family: var(--font-primary);
     background-color: var(--color-background);
+    color: var(--color-text-dark);
 }
+
 .container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
 }
+
 .card {
-    border-radius: var(--border-radius-card);
+    border-radius: var(--radius-card);
     box-shadow: 0 4px 6px var(--color-shadow);
     margin-bottom: 20px;
+    background: var(--color-white);
 }
 
-/* --- Header --- */
 .header-section {
     background: linear-gradient(
         to right,
@@ -77,19 +74,18 @@ body {
     );
     color: var(--color-white);
     padding: 30px 0;
-    border-radius: var(--border-radius-card);
+    border-radius: var(--radius-card);
     margin-bottom: 30px;
 }
 
-/* --- Tables (K-Map & Truth Table) --- */
 .kmap-table,
 .truth-table {
     width: 100%;
     border-collapse: collapse;
     margin: 20px 0;
     table-layout: fixed;
-    overflow: hidden; /* Keep this? Review if needed */
 }
+
 .kmap-table th,
 .kmap-table td {
     border: 1px solid var(--color-border);
@@ -97,21 +93,18 @@ body {
     text-align: center;
 }
 
-/* --- K-Map Cells --- */
 .kmap-cell {
-    width: auto;
     min-width: 60px;
     height: 60px;
     cursor: pointer;
-    -webkit-user-select: none;
     user-select: none;
     transition:
-        background-color 0.3s,
-        border-color 0.3s,
-        box-shadow 0.3s;
+        background-color 0.25s,
+        border-color 0.25s,
+        box-shadow 0.25s;
     overflow: hidden;
     text-overflow: ellipsis;
-    position: relative; /* Needed for potential future absolute positioning inside */
+    position: relative;
 }
 .kmap-cell.selected-0 {
     background-color: var(--color-danger);
@@ -126,32 +119,26 @@ body {
     color: var(--color-black);
 }
 
-/* Styles for selected cells (general) */
 .kmap-cell.selected-cell {
     border: 3px solid var(--color-info-border);
     box-shadow: 0 0 10px var(--color-info-shadow);
     z-index: 10;
 }
 
-/* Style cells differently based on selection mode */
-[data-mode="minterms"] .selected-cell.selected-1 {
+[data-mode="minterms"] .kmap-cell.selected-cell.selected-1 {
     border-color: var(--color-success);
     box-shadow: 0 0 10px var(--color-success-shadow);
 }
-[data-mode="minterms"] .selected-cell.selected-x {
+[data-mode="minterms"] .kmap-cell.selected-cell.selected-x,
+[data-mode="maxterms"] .kmap-cell.selected-cell.selected-x {
     border-color: var(--color-warning);
     box-shadow: 0 0 10px var(--color-warning-shadow);
 }
-[data-mode="maxterms"] .selected-cell.selected-0 {
+[data-mode="maxterms"] .kmap-cell.selected-cell.selected-0 {
     border-color: var(--color-danger);
     box-shadow: 0 0 10px var(--color-danger-shadow);
 }
-[data-mode="maxterms"] .selected-cell.selected-x {
-    border-color: var(--color-warning);
-    box-shadow: 0 0 10px var(--color-warning-shadow);
-}
 
-/* Style for truth table mode highlighting */
 [data-mode="truthTable"] .kmap-cell.selected-1 {
     border: 2px solid var(--color-success);
 }
@@ -162,16 +149,18 @@ body {
     border: 2px solid var(--color-warning);
 }
 
-/* --- Truth Table Interaction --- */
 .tt-clickable {
     cursor: pointer;
     position: relative;
-    transition: all 0.2s ease;
+    transition:
+        transform 0.2s,
+        box-shadow 0.2s,
+        font-weight 0.2s;
 }
 .tt-clickable:hover {
     transform: scale(1.1);
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); /* Keep specific shadow? */
-    font-weight: bold;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    font-weight: 600;
 }
 .tt-clickable:active {
     transform: scale(0.95);
@@ -185,7 +174,6 @@ body {
     opacity: 0.5;
 }
 
-/* --- Buttons --- */
 .btn-primary {
     background-color: var(--color-primary);
     border-color: var(--color-primary);
@@ -194,42 +182,40 @@ body {
     background-color: var(--color-primary-hover);
     border-color: var(--color-primary-hover);
 }
-/* Styles for active tool buttons */
 .btn-group .btn.active {
     filter: brightness(120%);
     transform: translateY(1px);
 }
-/* Make the selection tool more visible when active */
 #selectTool.active {
     background-color: var(--color-info);
     color: var(--color-white);
-    font-weight: bold;
+    font-weight: 600;
 }
-/* Style for disabled features */
 .btn:disabled {
     opacity: 0.6;
     cursor: not-allowed;
 }
 #useExpressionAnyway {
-    transition: all 0.2s;
+    transition:
+        background-color 0.2s,
+        color 0.2s;
 }
 #useExpressionAnyway:hover {
     background-color: var(--color-warning);
     color: var(--color-text-dark);
 }
 
-/* --- Output/Display Areas --- */
 #simplifiedExpression {
     font-family: var(--font-monospace);
     font-size: 1.2rem;
     padding: 15px;
-    border-radius: var(--border-radius-input);
+    border-radius: var(--radius-input);
     background-color: var(--color-background);
     box-shadow: inset 0 0 5px var(--color-shadow);
     min-height: 60px;
     display: flex;
     align-items: center;
-    overflow-x: hidden; /* Consider auto if needed */
+    overflow-x: hidden;
     white-space: normal;
     word-wrap: break-word;
 }
@@ -239,7 +225,6 @@ body {
     max-height: 200px;
     overflow-y: auto;
 }
-/* Style for selected cells display */
 #selectedCells .badge {
     font-size: 0.9rem;
     padding: 0.5em 0.8em;
@@ -247,7 +232,6 @@ body {
     overflow-wrap: break-word;
 }
 
-/* --- Group Highlighting --- */
 .group-highlight-1 {
     background-color: var(--color-success-highlight);
 }
@@ -264,7 +248,6 @@ body {
     background-color: var(--color-secondary-highlight);
 }
 
-/* --- Mode Indicator --- */
 #mode-indicator {
     font-size: 0.9rem;
     padding: 0.4em 0.7em;
@@ -272,9 +255,8 @@ body {
     margin-right: 10px;
 }
 
-/* --- Verification Results / Alerts --- */
 .alert {
-    border-radius: var(--border-radius-alert);
+    border-radius: var(--radius-alert);
     padding: 15px;
     margin-bottom: 15px;
 }
@@ -289,40 +271,32 @@ body {
     color: var(--color-danger-text);
 }
 .alert h5 {
-    margin-top: 0;
-    margin-bottom: 8px;
-    font-weight: bold;
+    margin: 0 0 8px;
+    font-weight: 600;
 }
 
-/* --- Utility Classes --- */
 .text-warning {
-    color: var(
-        --color-warning
-    ); /* Consider removing if Bootstrap provides this */
-    font-weight: bold;
+    color: var(--color-warning);
+    font-weight: 600;
 }
 .text-muted {
     opacity: 0.5;
 }
 
-/* --- Table Responsiveness (Review if needed) --- */
-/* These rules might hide content if table is wider than container */
 .table-responsive {
-    overflow-x: visible; /* Allows content to overflow */
+    overflow-x: visible;
     overflow-y: visible;
 }
-/* Ensure container has sufficient width */
 .card-body .table-responsive {
-    min-width: 100%; /* Ensures it takes at least full width */
-    overflow: hidden; /* Hides overflow within card-body */
+    min-width: 100%;
+    overflow: hidden;
 }
 
-/* --- Footer --- */
 .footer {
     border-top: 1px solid var(--color-border-light);
     font-size: 0.9em;
-    padding-top: 15px; /* Added padding for spacing */
-    margin-top: 30px; /* Added margin for spacing */
-    text-align: center; /* Center footer text */
-    color: #6c757d; /* Muted text color */
+    padding-top: 15px;
+    margin-top: 30px;
+    text-align: center;
+    color: #6c757d;
 }
